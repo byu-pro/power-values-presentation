@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Values Community Director Presentation</title>
+    <link rel="icon" href="images/_favicon_white.png" sizes="40x40" type="image/png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="images/Compass logo.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-yellow: #f9e266;
+            --color-teal: #5fa3b0;
+            --color-dark-teal: #1c6264;
+            --color-maroon: #5e253a;
+            --color-pink: #de97b2;
+            --color-off-white: #fffbfd;
+            --color-dark-pink: #853256;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--color-off-white);
+            color: var(--color-dark-teal);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            position: relative;
+            background-image: radial-gradient(circle at 5% 5%, hsla(328, 51%, 85%, 0.25), transparent 30%),
+                              radial-gradient(circle at 95% 95%, hsla(189, 36%, 66%, 0.25), transparent 35%);
+        }
+        
+        #background-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: visible;
+        }
+
+        .abstract-line {
+            fill: none;
+            stroke-linecap: round;
+            stroke-width: 2;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            opacity: 0.6;
+        }
+
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(15px, -10px) rotate(3deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .abstract-line-1 {
+            stroke: var(--color-pink);
+            animation: draw 6s cubic-bezier(0.25, 1, 0.5, 1) forwards, 
+                       float 20s ease-in-out 6s infinite alternate;
+        }
+
+        .abstract-line-2 {
+            stroke: var(--color-teal);
+             animation: draw 5s cubic-bezier(0.25, 1, 0.5, 1) 1s forwards, 
+                       float 25s ease-in-out 6s infinite alternate;
+        }
+
+        .abstract-line-3 {
+            stroke: var(--color-yellow);
+             animation: draw 7s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards, 
+                       float 18s ease-in-out 7.5s infinite alternate;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            background: rgba(255, 251, 253, 0.96);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.04), 0px 15px 35px rgba(94, 37, 58, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border-radius: 20px;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        @media (hover: hover) and (pointer: fine) {
+            .presentation-container:hover {
+                transform: translateY(-10px);
+                box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.06), 0px 20px 50px rgba(94, 37, 58, 0.12);
+            }
+        }
+
+        @media (max-width: 767px) {
+             .presentation-container {
+                height: auto;
+                min-height: 90vh;
+                border-radius: 0;
+            }
+        }
+
+        .presentation-main {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-content-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .slide-content-container {
+                padding: 3rem 4rem;
+            }
+        }
+
+        .slide-content-container.active {
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        .cover-slide, .end-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .cover-slide > *, .end-slide > * {
+            text-align: center;
+        }
+        
+        /* Updated for click-to-reveal */
+        .animatable {
+            opacity: 0;
+            transform: translateY(30px) scale(0.98);
+            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .animated-in {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .slide-title, .cover-title, .end-slide-title {
+            font-family: 'Karla', sans-serif;
+            font-weight: 700;
+            color: var(--color-dark-pink);
+            margin-bottom: 0.5rem;
+            width: 100%;
+            line-height: 1.2;
+            background: linear-gradient(90deg, var(--color-dark-pink), var(--color-maroon), var(--color-dark-pink));
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        .slide-subtitle, .cover-subtitle, .end-slide-subtitle {
+            font-family: 'Karla', sans-serif;
+            font-weight: 400;
+            color: var(--color-dark-teal);
+            margin-bottom: 1.5rem;
+            width: 100%;
+            line-height: 1.4;
+        }
+        
+        .slide-title, .slide-subtitle, .cover-title, .cover-subtitle, .end-slide-title, .end-slide-subtitle {
+             text-align: center;
+        }
+        
+        .slide-title { font-size: 1.8rem; }
+        .slide-subtitle { font-size: 1rem; }
+        .cover-title, .end-slide-title { font-size: 2.5rem; }
+        .cover-subtitle, .end-slide-subtitle { font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;}
+
+        @media (min-width: 768px) {
+            .slide-title { font-size: 2.5rem; }
+            .slide-subtitle { font-size: 1.2rem; }
+            .cover-title, .end-slide-title { font-size: 3.5rem; }
+            .cover-subtitle, .end-slide-subtitle { font-size: 1.3rem; }
+        }
+
+        .bullet-point {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            width: 100%;
+        }
+
+        .bullet-point-text-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .bullet-point-text {
+            flex: 1;
+            font-weight: 400;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .bullet-point-value {
+            font-family: 'Karla', sans-serif;
+            font-weight: 700;
+            color: var(--color-maroon);
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .bullet-point-text-container {
+                flex-direction: row;
+                align-items: center;
+                font-size: 1.1rem;
+            }
+            .bullet-point {
+                 margin-bottom: 1.2rem;
+            }
+            .bullet-point-value {
+                font-size: 1.1rem;
+                margin-left: 1.5rem;
+                margin-top: 0;
+                text-align: right;
+                min-width: 150px;
+            }
+        }
+
+        .total-value-container {
+            width: 100%;
+            margin-top: 2rem;
+            border-top: 2px solid var(--color-teal);
+            padding-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .total-value-text {
+            font-family: 'Karla', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-dark-pink);
+            margin-bottom: 0.5rem;
+        }
+
+        .today-cost-text {
+            font-family: 'Karla', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-pink);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            .total-value-text { font-size: 1.4rem; }
+            .today-cost-text { font-size: 2.2rem; }
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            color: var(--color-maroon);
+            margin-top: 1rem;
+            text-align: center;
+            font-style: italic;
+            line-height: 1.4;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .disclaimer { font-size: 0.8rem; }
+        }
+
+        .navigation-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        .nav-button {
+            background-color: var(--color-dark-teal);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-button:hover:not(.disabled) {
+            background-color: var(--color-maroon);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(94, 37, 58, 0.3);
+        }
+        .nav-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: var(--color-dark-teal);
+        }
+
+        .slide-progress {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            font-family: 'Lato', sans-serif;
+            color: var(--color-dark-teal);
+            font-size: 0.9rem;
+            background: rgba(255, 251, 253, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .progress-dots {
+            display: flex;
+            margin-left: 10px;
+        }
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-teal);
+            opacity: 0.3;
+            margin: 0 4px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .progress-dot.active {
+            opacity: 1;
+            background-color: var(--color-dark-pink);
+            transform: scale(1.4);
+            box-shadow: 0 0 10px var(--color-dark-pink);
+        }
+        
+        @media (min-width: 768px) {
+            .slide-content-container:not(.cover-slide):not(.end-slide) {
+                align-items: center;
+            }
+            .slide-content-container:not(.cover-slide):not(.end-slide) .slide-title,
+            .slide-content-container:not(.cover-slide):not(.end-slide) .slide-subtitle {
+                text-align: left;
+            }
+            #slide-1-points,
+            #slide-2-points,
+            #slide-3-points,
+            #slide-4-points,
+            #slide-5-points,
+            .slide-content-container:not(.cover-slide):not(.end-slide) .total-value-container {
+                width: 100%;
+                max-width: 850px;
+            }
+            .slide-content-container:not(.cover-slide):not(.end-slide) .total-value-container {
+                align-items: flex-start;
+            }
+            .slide-content-container:not(.cover-slide):not(.end-slide) .disclaimer {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <svg id="background-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path class="abstract-line abstract-line-1" d="M -10,10 C 20,25 40,0 70,15 S 110,80 110,80"></path>
+        <path class="abstract-line abstract-line-2" d="M -10,90 C 15,110 40,80 60,85 S 110,30 110,30"></path>
+        <path class="abstract-line abstract-line-3" d="M -10,50 C 30,50 40,20 70,40 S 90,110 110,90"></path>
+    </svg>
+
+    <div class="presentation-container">
+        <div class="presentation-main">
+            <div id="cover-slide" class="slide-content-container active cover-slide">
+                <img src="images/Power Values 853256 Logo.png" alt="Power Values Logo" class="animatable animatable-initial" style="width: 500px; height: auto; max-width: 90%; margin-bottom: 1.5rem;">
+                <h1 class="cover-title animatable animatable-initial">Your Path to Unshakeable Clarity</h1>
+                <p class="cover-subtitle animatable animatable-initial">A professional guide to the Power Values framework and its transformational programs.</p>
+            </div>
+
+            <div id="slide-1" class="slide-content-container">
+                <h1 class="slide-title animatable animatable-initial">1. The Personal Coaching Path</h1>
+                <h2 class="slide-subtitle animatable animatable-initial">Private coaching. Radical alignment. Accelerated results.</h2>
+                <div id="slide-1-points">
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">24 private sessions with Jonathan Keim (2/month for 12 months)</span>
+                            <span class="bullet-point-value" data-value="12000">$12,000</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Full access to Group Coaching</span>
+                            <span class="bullet-point-value" data-value="6000">$6,000</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Full access to the Power Values Training Series</span>
+                            <span class="bullet-point-value" data-value="997">$997</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Premium Tier Power Values AI Coach for a full year</span>
+                            <span class="bullet-point-value" data-value="2997">$2,997</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">An exclusive private coaching workshop at international retreat</span>
+                            <span class="bullet-point-value" data-value="1000">$1,000+</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="slide-1-total" class="total-value-container animatable animatable-step">
+                    <p class="total-value-text">Total Value: <span data-value="22000">$22,000+</span></p>
+                    <p class="today-cost-text">Today's Cost: <span data-value="9990">$9,990</span></p>
+                    <p class="disclaimer">⚠️ *Limited Availability: Jonathan only works with 5 private clients per year.* Currently, <strong>2 seats remain.</strong></p>
+                </div>
+            </div>
+
+            <div id="slide-2" class="slide-content-container">
+                <h1 class="slide-title animatable animatable-initial">2. Group Coaching Circle</h1>
+                <h2 class="slide-subtitle animatable animatable-initial">Where high-integrity growth meets high-caliber community.</h2>
+                <div id="slide-2-points">
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">12 Months of Live Group Coaching (2x/month)</span>
+                            <span class="bullet-point-value" data-value="6000">$6,000</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Full access to the Power Values Training Series</span>
+                            <span class="bullet-point-value" data-value="997">$997</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">The Premium Power Values AI Coach with premium tiered features</span>
+                            <span class="bullet-point-value" data-value="2997">$2,997</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Access to our private member group & guest lectures</span>
+                            <span class="bullet-point-value" data-value="3200">$3,200</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Invitation to international retreats, including the Maasai Mara Safari in Kenya</span>
+                            <span class="bullet-point-value" data-value="3500">$3,500+</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="slide-2-total" class="total-value-container animatable animatable-step">
+                    <p class="total-value-text">Total Value: <span data-value="17600">$17,600+</span></p>
+                    <p class="today-cost-text">Today's Cost: <span data-value="4990">$4,990</span></p>
+                    <p class="disclaimer">Invite-only. Start by completing your Power Values Group Coaching Application.</p>
+                </div>
+            </div>
+
+            <div id="slide-3" class="slide-content-container">
+                <h1 class="slide-title animatable animatable-initial">3. Power Values Training Series</h1>
+                <h2 class="slide-subtitle animatable animatable-initial">A full year of weekly alignment + AI-powered support.</h2>
+                <div id="slide-3-points">
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">52 Value Based Action Sheets delivered weekly</span>
+                            <span class="bullet-point-value" data-value="2000">$2,000</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Tier One Access of the Power Values AI Coach Access</span>
+                            <span class="bullet-point-value" data-value="997">$997</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Digital copy of the Power Values book</span>
+                            <span class="bullet-point-value" data-value="20">$20</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="slide-3-total" class="total-value-container animatable animatable-step">
+                    <p class="total-value-text">Total Value: <span data-value="3017">$3,000+</span></p>
+                    <p class="today-cost-text">Today's Cost: <span data-value="997">$997</span></p>
+                    <p class="disclaimer">Available with 1, 3, 6, or 12-month installment options.</p>
+                </div>
+            </div>
+
+            <div id="slide-4" class="slide-content-container">
+                <h1 class="slide-title animatable animatable-initial">4. The Power Values Book</h1>
+                <h2 class="slide-subtitle animatable animatable-initial">The foundation of it all. A practical guide to clarity.</h2>
+                <div id="slide-4-points">
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Build and prioritize your personal values hierarchy</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Make emotionally aligned, confident decisions in every area of life</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Shift patterns of indecision, self-sabotage, and overwhelm</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="slide-4-total" class="total-value-container animatable animatable-step">
+                    <p class="today-cost-text">Today's Price: <span data-value="7">$7</span></p>
+                     <p class="disclaimer">PDF version. Also available in paperback via Amazon.</p>
+                </div>
+            </div>
+            
+            <div id="slide-5" class="slide-content-container">
+                <h1 class="slide-title animatable animatable-initial">5. Power Values Trainer Certification</h1>
+                <h2 class="slide-subtitle animatable animatable-initial">From Student → To Leader.</h2>
+                <div id="slide-5-points">
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Official Trainer Certification and license to teach the method</span>
+                            <span class="bullet-point-value" data-value="3000">$3,000</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Custom-branded AI Coach to support your clients</span>
+                            <span class="bullet-point-value" data-value="1500">$1,500</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Access to a stream of referred clients and business-building mentorship</span>
+                            <span class="bullet-point-value" data-value="5000">$5,000+</span>
+                        </div>
+                    </div>
+                    <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-text-container">
+                            <span class="bullet-point-text">Full access to the Personal Coaching Path</span>
+                            <span class="bullet-point-value" data-value="22000">$22,000+</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="slide-5-total" class="total-value-container animatable animatable-step">
+                    <p class="total-value-text">Total Value: <span data-value="28000">$28,000+</span></p>
+                    <p class="today-cost-text">Today's Cost: <span data-value="20000">$20,000</span></p>
+                    <p class="disclaimer">By application only. Interview required.</p>
+                </div>
+            </div>
+
+            <div id="end-slide" class="slide-content-container end-slide">
+                <h1 class="end-slide-title animatable animatable-initial">Thank You</h1>
+                <p class="end-slide-subtitle animatable animatable-initial">Ready to transform? Let's begin the journey to unshakeable clarity.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation-controls">
+        <button id="prev-button" class="nav-button disabled">Previous</button>
+        <button id="next-button" class="nav-button">Next</button>
+    </div>
+
+    <div class="slide-progress">
+        <span id="current-slide">1</span>/<span id="total-slides">7</span>
+        <div class="progress-dots" id="progress-dots"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide-content-container');
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            const currentSlideEl = document.getElementById('current-slide');
+            const totalSlidesEl = document.getElementById('total-slides');
+            const progressDotsContainer = document.getElementById('progress-dots');
+            
+            let currentSlideIndex = 0;
+            const totalSlides = slides.length;
+
+            function animateValue(el, duration) {
+                const endValue = parseInt(el.dataset.value, 10);
+                if (isNaN(endValue)) return;
+                let startTime = null;
+                const step = (timestamp) => {
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    const currentVal = Math.floor(progress * endValue);
+                    let formattedVal = '$' + currentVal.toLocaleString('en-US');
+                    if (el.textContent.includes('+')) {
+                        formattedVal += '+';
+                    }
+                    el.textContent = formattedVal;
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+
+            // Reveals the next hidden element on the current slide.
+            // Returns true if an element was revealed, false otherwise.
+            function revealNextStep() {
+                const activeSlide = slides[currentSlideIndex];
+                const elementsToAnimate = activeSlide.querySelectorAll('.animatable-step:not(.animated-in)');
+                
+                if (elementsToAnimate.length > 0) {
+                    const nextElement = elementsToAnimate[0];
+                    nextElement.classList.add('animated-in');
+                    
+                    const valuesToAnimate = nextElement.querySelectorAll('[data-value]');
+                    if (valuesToAnimate.length > 0) {
+                         setTimeout(() => {
+                            valuesToAnimate.forEach(el => animateValue(el, 1200));
+                         }, 150);
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            function updateNavigation() {
+                prevButton.classList.toggle('disabled', currentSlideIndex === 0);
+                nextButton.classList.toggle('disabled', currentSlideIndex === totalSlides - 1);
+                currentSlideEl.textContent = currentSlideIndex + 1;
+                const dots = document.querySelectorAll('.progress-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlideIndex);
+                });
+            }
+
+            function goToSlide(index) {
+                if (index < 0 || index >= totalSlides) return;
+
+                // Reset all animatable elements before switching slide
+                document.querySelectorAll('.animatable').forEach(el => el.classList.remove('animated-in'));
+
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+
+                currentSlideIndex = index;
+                
+                // Animate initial elements of the new slide (titles, etc.)
+                const activeSlide = slides[currentSlideIndex];
+                const initialElements = activeSlide.querySelectorAll('.animatable-initial');
+                initialElements.forEach((el, idx) => {
+                    setTimeout(() => el.classList.add('animated-in'), idx * 100);
+                });
+
+                // If the slide has no steps to reveal, animate its values immediately
+                const steps = activeSlide.querySelectorAll('.animatable-step');
+                if (steps.length === 0) {
+                     const valuesToAnimate = activeSlide.querySelectorAll('[data-value]');
+                     setTimeout(() => {
+                        valuesToAnimate.forEach(el => animateValue(el, 1200));
+                     }, 200);
+                }
+
+                updateNavigation();
+            }
+
+            function handleNext() {
+                const wasStepRevealed = revealNextStep();
+                if (!wasStepRevealed) {
+                    goToSlide(currentSlideIndex + 1);
+                }
+            }
+            
+            function init() {
+                totalSlidesEl.textContent = totalSlides;
+
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'progress-dot';
+                    progressDotsContainer.appendChild(dot);
+                }
+
+                nextButton.addEventListener('click', handleNext);
+                prevButton.addEventListener('click', () => goToSlide(currentSlideIndex - 1));
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight' || e.key === ' ') {
+                        e.preventDefault();
+                        if (currentSlideIndex < totalSlides - 1) {
+                            handleNext();
+                        }
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                         if (currentSlideIndex > 0) {
+                            goToSlide(currentSlideIndex - 1);
+                        }
+                    }
+                });
+                
+                goToSlide(0);
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
