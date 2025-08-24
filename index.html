@@ -52,14 +52,17 @@
             font-size: 1rem;
             }
             .navigation-controls {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            left: 10px;
-            width: auto;
-            justify-content: space-between;
-            gap: 5px;
-            z-index: 101;
+                position: fixed;
+                bottom: 10px;
+                left: 0; /* CHANGED for symmetry */
+                right: 0; /* CHANGED for symmetry */
+                width: 100%; /* CHANGED for symmetry */
+                padding: 0 10px; /* ADDED for symmetry */
+                box-sizing: border-box; /* ADDED for symmetry */
+                display: flex;
+                justify-content: space-between;
+                gap: 5px;
+                z-index: 101;
             }
             .nav-button {
             padding: 8px 12px;
