@@ -54,11 +54,11 @@
             .navigation-controls {
                 position: fixed;
                 bottom: 10px;
-                left: 0; /* CHANGED for symmetry */
-                right: 0; /* CHANGED for symmetry */
-                width: 100%; /* CHANGED for symmetry */
-                padding: 0 10px; /* ADDED for symmetry */
-                box-sizing: border-box; /* ADDED for symmetry */
+                left: 0;
+                right: 0;
+                width: 100%;
+                padding: 0 10px;
+                box-sizing: border-box;
                 display: flex;
                 justify-content: space-between;
                 gap: 5px;
@@ -76,7 +76,7 @@
             width: auto;
             font-size: 0.85rem;
             padding: 6px 10px;
-            display: none !important; /* Forcefully hides the element on mobile */
+            display: none !important;
             }
             .progress-dot {
             width: 7px;
@@ -222,21 +222,29 @@
             left: 0;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             overflow-y: auto;
             padding: 2rem;
-        }
-
-        @media (min-width: 768px) {
-            .slide-content-container {
-                padding: 3rem 4rem;
-            }
+            transform: scale(1.05);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slide-content-container.active {
             opacity: 1;
             pointer-events: auto;
             z-index: 1;
+            transform: scale(1);
+        }
+
+        .slide-content-container.exiting {
+            opacity: 0;
+            transform: scale(0.95);
+            z-index: 0;
+        }
+
+        @media (min-width: 768px) {
+            .slide-content-container {
+                padding: 3rem 4rem;
+            }
         }
 
         .cover-slide, .end-slide {
@@ -251,13 +259,13 @@
         
         .animatable {
             opacity: 0;
-            transform: translateY(30px) scale(0.98);
-            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .animated-in {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
 
         @keyframes pulse {
@@ -475,7 +483,7 @@
             cursor: pointer;
             font-family: 'Lato', sans-serif;
             font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .nav-button:hover:not(.disabled) {
@@ -826,7 +834,6 @@
                         formattedVal += '+';
                     }
                     
-                    // MODIFIED: Check for the class and append ' Value' accordingly
                     if (el.classList.contains('bullet-point-value')) {
                         el.textContent = formattedVal + ' Value';
                     } else {
@@ -840,28 +847,11 @@
                 window.requestAnimationFrame(step);
             }
 
-            function revealNextStep() {
-                const activeSlide = slides[currentSlideIndex];
-                const elementsToAnimate = activeSlide.querySelectorAll('.animatable-step:not(.animated-in)');
-                
-                if (elementsToAnimate.length > 0) {
-                    const nextElement = elementsToAnimate[0];
-                    nextElement.classList.add('animated-in');
-                    
-                    const valuesToAnimate = nextElement.querySelectorAll('[data-value]');
-                    if (valuesToAnimate.length > 0) {
-                         setTimeout(() => {
-                            valuesToAnimate.forEach(el => animateValue(el, 1200));
-                         }, 150);
-                    }
-                    return true;
-                }
-                return false;
-            }
-
             function updateNavigation() {
                 prevButton.classList.toggle('disabled', currentSlideIndex === 0);
-                nextButton.classList.toggle('disabled', currentSlideIndex === totalSlides - 1);
+                const activeSlide = slides[currentSlideIndex];
+                const remainingSteps = activeSlide.querySelectorAll('.animatable-step:not(.animated-in)').length;
+                nextButton.classList.toggle('disabled', currentSlideIndex === totalSlides - 1 && remainingSteps === 0);
                 currentSlideEl.textContent = currentSlideIndex + 1;
                 const dots = document.querySelectorAll('.progress-dot');
                 dots.forEach((dot, index) => {
@@ -869,38 +859,82 @@
                 });
             }
 
-            function goToSlide(index) {
+            function revealNextStep() {
+                const activeSlide = slides[currentSlideIndex];
+                const stepsToReveal = activeSlide.querySelectorAll('.animatable-step:not(.animated-in)');
+                
+                if (stepsToReveal.length > 0) {
+                    const nextElement = stepsToReveal[0];
+                    nextElement.classList.add('animated-in');
+                    
+                    const valuesToAnimate = nextElement.querySelectorAll('[data-value]');
+                    if (valuesToAnimate.length > 0) {
+                         setTimeout(() => {
+                            valuesToAnimate.forEach(el => animateValue(el, 1200));
+                         }, 50);
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            function goToSlide(index, isSteppingBack = false) {
                 if (index < 0 || index >= totalSlides) return;
 
-                document.querySelectorAll('.animatable').forEach(el => el.classList.remove('animated-in'));
-
-                slides.forEach((slide, i) => {
-                    slide.classList.toggle('active', i === index);
-                });
-
-                currentSlideIndex = index;
-                
-                const activeSlide = slides[currentSlideIndex];
-                const initialElements = activeSlide.querySelectorAll('.animatable-initial');
-                initialElements.forEach((el, idx) => {
-                    setTimeout(() => el.classList.add('animated-in'), idx * 100);
-                });
-
-                const steps = activeSlide.querySelectorAll('.animatable-step');
-                if (steps.length === 0) {
-                     const valuesToAnimate = activeSlide.querySelectorAll('[data-value]');
-                     setTimeout(() => {
-                        valuesToAnimate.forEach(el => animateValue(el, 1200));
-                     }, 200);
+                const currentSlide = slides[currentSlideIndex];
+                if (currentSlide) {
+                    currentSlide.classList.add('exiting');
                 }
+                
+                slides.forEach(s => s.querySelectorAll('.animatable').forEach(el => {
+                    el.classList.remove('animated-in');
+                    el.style.transitionDelay = '0ms';
+                }));
 
-                updateNavigation();
+                setTimeout(() => {
+                    if (currentSlide) {
+                        currentSlide.classList.remove('active');
+                        currentSlide.classList.remove('exiting');
+                    }
+
+                    currentSlideIndex = index;
+                    const newSlide = slides[currentSlideIndex];
+                    newSlide.classList.add('active');
+                    
+                    const elementsToAnimate = newSlide.querySelectorAll('.animatable-initial');
+                    
+                    elementsToAnimate.forEach((el, idx) => {
+                        el.style.transitionDelay = `${100 + idx * 100}ms`;
+                        el.classList.add('animated-in');
+                    });
+                    
+                    if (isSteppingBack) {
+                        const stepsToAnimate = newSlide.querySelectorAll('.animatable-step');
+                        stepsToAnimate.forEach(el => el.classList.add('animated-in'));
+                    }
+                    
+                    const valuesToAnimate = newSlide.querySelectorAll('.animated-in [data-value]');
+                    setTimeout(() => {
+                       valuesToAnimate.forEach(el => animateValue(el, 1200));
+                    }, 200);
+
+                    updateNavigation();
+                }, 600);
             }
 
             function handleNext() {
                 const wasStepRevealed = revealNextStep();
                 if (!wasStepRevealed) {
-                    goToSlide(currentSlideIndex + 1);
+                    if (currentSlideIndex < totalSlides - 1) {
+                        goToSlide(currentSlideIndex + 1);
+                    }
+                }
+                updateNavigation();
+            }
+
+            function handleBack() {
+                if (currentSlideIndex > 0) {
+                    goToSlide(currentSlideIndex - 1, true);
                 }
             }
             
@@ -914,18 +948,18 @@
                 }
 
                 nextButton.addEventListener('click', handleNext);
-                prevButton.addEventListener('click', () => goToSlide(currentSlideIndex - 1));
+                prevButton.addEventListener('click', handleBack);
 
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'ArrowRight' || e.key === ' ') {
                         e.preventDefault();
-                        if (currentSlideIndex < totalSlides - 1) {
-                            handleNext();
+                        if (!nextButton.classList.contains('disabled')) {
+                           handleNext();
                         }
                     } else if (e.key === 'ArrowLeft') {
                         e.preventDefault();
-                         if (currentSlideIndex > 0) {
-                            goToSlide(currentSlideIndex - 1);
+                         if (!prevButton.classList.contains('disabled')) {
+                           handleBack();
                         }
                     }
                 });
