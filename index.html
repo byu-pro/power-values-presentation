@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <style>
         :root {
             --color-yellow: #f9e266;
@@ -170,7 +172,6 @@
             text-align: center;
         }
         
-        /* Updated for click-to-reveal */
         .animatable {
             opacity: 0;
             transform: translateY(30px) scale(0.98);
@@ -231,14 +232,29 @@
             .cover-subtitle, .end-slide-subtitle { font-size: 1.3rem; }
         }
 
+        /* --- Icon & Bullet Point Styles (Alignment Corrected) --- */
         .bullet-point {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            align-items: center; /* This is the key change for vertical alignment */
+            gap: 1rem;
             font-size: 1rem;
             margin-bottom: 1rem;
             line-height: 1.5;
             width: 100%;
+        }
+        .bullet-point-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: hsla(189, 36%, 66%, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .bullet-point-icon ion-icon {
+            font-size: 20px;
+            color: var(--color-dark-teal);
         }
 
         .bullet-point-text-container {
@@ -327,7 +343,45 @@
         @media (min-width: 768px) {
             .disclaimer { font-size: 0.8rem; }
         }
-
+        
+        .book-slide-content {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        .book-image-container {
+            margin-bottom: 2rem;
+            flex-shrink: 0;
+        }
+        .book-image-container img {
+            max-width: 250px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(94, 37, 58, 0.15);
+        }
+        .book-details-container {
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .book-slide-content {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 3rem;
+            }
+            .book-image-container {
+                margin-bottom: 0;
+            }
+            .book-image-container img {
+                 max-width: 300px;
+            }
+            .book-details-container {
+                margin-top: 1rem;
+            }
+        }
+        
         .navigation-controls {
             position: fixed;
             bottom: 20px;
@@ -442,30 +496,35 @@
                 <h2 class="slide-subtitle animatable animatable-initial">Private coaching. Radical alignment. Accelerated results.</h2>
                 <div id="slide-1-points">
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="chatbubbles-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">24 private sessions with Jonathan Keim (2/month for 12 months)</span>
                             <span class="bullet-point-value" data-value="12000">$12,000</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="people-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Full access to Group Coaching</span>
                             <span class="bullet-point-value" data-value="6000">$6,000</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="school-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Full access to the Power Values Training Series</span>
                             <span class="bullet-point-value" data-value="997">$997</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="hardware-chip-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Premium Tier Power Values AI Coach for a full year</span>
                             <span class="bullet-point-value" data-value="2997">$2,997</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="earth-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">An exclusive private coaching workshop at international retreat</span>
                             <span class="bullet-point-value" data-value="1000">$1,000+</span>
@@ -484,30 +543,35 @@
                 <h2 class="slide-subtitle animatable animatable-initial">Where high-integrity growth meets high-caliber community.</h2>
                 <div id="slide-2-points">
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="people-circle-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">12 Months of Live Group Coaching (2x/month)</span>
                             <span class="bullet-point-value" data-value="6000">$6,000</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="school-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Full access to the Power Values Training Series</span>
                             <span class="bullet-point-value" data-value="997">$997</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="hardware-chip-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">The Premium Power Values AI Coach with premium tiered features</span>
                             <span class="bullet-point-value" data-value="2997">$2,997</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="chatbox-ellipses-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Access to our private member group & guest lectures</span>
                             <span class="bullet-point-value" data-value="3200">$3,200</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="compass-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Invitation to international retreats, including the Maasai Mara Safari in Kenya</span>
                             <span class="bullet-point-value" data-value="3500">$3,500+</span>
@@ -526,18 +590,21 @@
                 <h2 class="slide-subtitle animatable animatable-initial">A full year of weekly alignment + AI-powered support.</h2>
                 <div id="slide-3-points">
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="document-text-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">52 Value Based Action Sheets delivered weekly</span>
                             <span class="bullet-point-value" data-value="2000">$2,000</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="keypad-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Tier One Access of the Power Values AI Coach Access</span>
                             <span class="bullet-point-value" data-value="997">$997</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="book-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Digital copy of the Power Values book</span>
                             <span class="bullet-point-value" data-value="20">$20</span>
@@ -554,26 +621,36 @@
             <div id="slide-4" class="slide-content-container">
                 <h1 class="slide-title animatable animatable-initial">4. The Power Values Book</h1>
                 <h2 class="slide-subtitle animatable animatable-initial">The foundation of it all. A practical guide to clarity.</h2>
-                <div id="slide-4-points">
-                    <div class="bullet-point animatable animatable-step">
-                        <div class="bullet-point-text-container">
-                            <span class="bullet-point-text">Build and prioritize your personal values hierarchy</span>
+                <div class="book-slide-content">
+                    <div class="book-image-container animatable animatable-step">
+                        <img src="images/book.png" alt="Power Values Book Cover">
+                    </div>
+                    <div class="book-details-container">
+                        <div id="slide-4-points">
+                            <div class="bullet-point animatable animatable-step">
+                                <div class="bullet-point-icon"><ion-icon name="bar-chart-outline"></ion-icon></div>
+                                <div class="bullet-point-text-container">
+                                    <span class="bullet-point-text">Build and prioritize your personal values hierarchy</span>
+                                </div>
+                            </div>
+                            <div class="bullet-point animatable animatable-step">
+                                <div class="bullet-point-icon"><ion-icon name="heart-circle-outline"></ion-icon></div>
+                                <div class="bullet-point-text-container">
+                                    <span class="bullet-point-text">Make emotionally aligned, confident decisions in every area of life</span>
+                                </div>
+                            </div>
+                            <div class="bullet-point animatable animatable-step">
+                                <div class="bullet-point-icon"><ion-icon name="shuffle-outline"></ion-icon></div>
+                                <div class="bullet-point-text-container">
+                                    <span class="bullet-point-text">Shift patterns of indecision, self-sabotage, and overwhelm</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="slide-4-total" class="total-value-container animatable animatable-step">
+                            <p class="today-cost-text">Today's Price: <span data-value="7">$7</span></p>
+                             <p class="disclaimer">PDF version. Also available in paperback via Amazon.</p>
                         </div>
                     </div>
-                    <div class="bullet-point animatable animatable-step">
-                        <div class="bullet-point-text-container">
-                            <span class="bullet-point-text">Make emotionally aligned, confident decisions in every area of life</span>
-                        </div>
-                    </div>
-                    <div class="bullet-point animatable animatable-step">
-                        <div class="bullet-point-text-container">
-                            <span class="bullet-point-text">Shift patterns of indecision, self-sabotage, and overwhelm</span>
-                        </div>
-                    </div>
-                </div>
-                <div id="slide-4-total" class="total-value-container animatable animatable-step">
-                    <p class="today-cost-text">Today's Price: <span data-value="7">$7</span></p>
-                     <p class="disclaimer">PDF version. Also available in paperback via Amazon.</p>
                 </div>
             </div>
             
@@ -582,24 +659,28 @@
                 <h2 class="slide-subtitle animatable animatable-initial">From Student → To Leader.</h2>
                 <div id="slide-5-points">
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="ribbon-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Official Trainer Certification and license to teach the method</span>
                             <span class="bullet-point-value" data-value="3000">$3,000</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="color-palette-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Custom-branded AI Coach to support your clients</span>
                             <span class="bullet-point-value" data-value="1500">$1,500</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="git-network-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Access to a stream of referred clients and business-building mentorship</span>
                             <span class="bullet-point-value" data-value="5000">$5,000+</span>
                         </div>
                     </div>
                     <div class="bullet-point animatable animatable-step">
+                        <div class="bullet-point-icon"><ion-icon name="diamond-outline"></ion-icon></div>
                         <div class="bullet-point-text-container">
                             <span class="bullet-point-text">Full access to the Personal Coaching Path</span>
                             <span class="bullet-point-value" data-value="22000">$22,000+</span>
@@ -662,8 +743,6 @@
                 window.requestAnimationFrame(step);
             }
 
-            // Reveals the next hidden element on the current slide.
-            // Returns true if an element was revealed, false otherwise.
             function revealNextStep() {
                 const activeSlide = slides[currentSlideIndex];
                 const elementsToAnimate = activeSlide.querySelectorAll('.animatable-step:not(.animated-in)');
@@ -696,7 +775,6 @@
             function goToSlide(index) {
                 if (index < 0 || index >= totalSlides) return;
 
-                // Reset all animatable elements before switching slide
                 document.querySelectorAll('.animatable').forEach(el => el.classList.remove('animated-in'));
 
                 slides.forEach((slide, i) => {
@@ -705,14 +783,12 @@
 
                 currentSlideIndex = index;
                 
-                // Animate initial elements of the new slide (titles, etc.)
                 const activeSlide = slides[currentSlideIndex];
                 const initialElements = activeSlide.querySelectorAll('.animatable-initial');
                 initialElements.forEach((el, idx) => {
                     setTimeout(() => el.classList.add('animated-in'), idx * 100);
                 });
 
-                // If the slide has no steps to reveal, animate its values immediately
                 const steps = activeSlide.querySelectorAll('.animatable-step');
                 if (steps.length === 0) {
                      const valuesToAnimate = activeSlide.querySelectorAll('[data-value]');
